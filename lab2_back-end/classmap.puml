@@ -1,0 +1,721 @@
+@startuml
+class com.h6.backend.service.admin.BatchAddCourseServer {
+~ RequestMapper requestMapper
+~ CourseMapper courseMapper
+~ OrganizationMapper organizationMapper
+~ ClassroomMapper classroomMapper
++ BatchAddResponse AddCourse(String,String)
+}
+class com.h6.backend.data.user.AlterUserRequest {
+~ String role
+~ String user_id
+~ String username
+~ String id_number
+~ String phone_number
+~ String email
+~ String department
+~ String major
+~ String status
+}
+class com.h6.backend.service.func.BuildCSV {
++ {static} ArrayList<String[]> Read_csv(String)
+}
+class com.h6.backend.service.admin.EduFunctionServer {
+~ PermissionMapper permissionMapper
++ void chooseCourse(boolean)
++ boolean getChooseCourse()
+}
+class com.h6.backend.data.course.AddCourseRequest {
+~ String requester_id
+~ CourseInfo courseInfo
+}
+class com.h6.backend.data.course.CourseInfo {
++ String number
++ int suffix
++ String name
++ int point
++ int classes_per_week
++ String teacher_id
++ int max_student
++ String introduction
++ String department
+}
+class com.h6.backend.entity.Permisson {
++ String configure_id
++ int choose_course
+}
+class com.h6.backend.service.OrganizationServer {
+~ OrganizationMapper organizationMapper
++ List<Organization> getOrganizations()
++ List<String> getDepartments()
++ List<String> getMajorsByDepartment(String)
++ boolean setOrganization(String,String)
++ boolean delOrganizationByMajor(String,String)
++ boolean delOrganizationByDepartment(String)
++ boolean altMajor(String,String,String)
++ boolean altDepartment(String,String)
+}
+class com.h6.backend.data.course.AddCourseResponse {
++ boolean submitted
++ boolean requester_valid
++ boolean unique
++ boolean self_operate
++ CourseInfoFormat courseInfoFormat
+}
+interface com.h6.backend.mapper.RequestMapper {
+~ int countRequestById(int)
+~ List<RequestEntity> getRequestAll()
+~ List<RequestEntity> getRequestById(int)
+~ List<RequestEntity> getRequestByRequester(String)
+~ List<RequestEntity> getRequestByRequesterClassName(String,String)
+~ List<RequestEntity> getRequestByHandler(String)
+~ List<RequestEntity> getRequestByHandlerClassName(String,String)
+~ void addRequest(String,String,String,String)
+~ int delRequest(int)
+~ void setRequestStatus(int,String,String)
+}
+class com.h6.backend.entity.Classtime {
++ int section
++ String time
+}
+class com.h6.backend.entity.Users {
+- String user_id
+- String role
+- String username
+- String id_number
+- String phone_number
+- String email
+- String passwd
+- int register_year
+- int login_status
+- String last_login_url
+- String session_id
+- String department
+- String major
+- String status
+}
+abstract class com.h6.backend.data.admin.BatchResponse {
++ boolean isOK
++ boolean fileOK
++ boolean authorized
++ boolean notNull
++ boolean unique
++ int error_batch
+}
+class com.h6.backend.Interceptor.LoginCheckHandlerInterceptor {
++ boolean preHandle(HttpServletRequest,HttpServletResponse,Object)
++ void afterCompletion(HttpServletRequest,HttpServletResponse,Object,Exception)
+}
+class com.h6.backend.data.admin.PermitResponse {
++ boolean isOk
++ boolean authorized
++ boolean request_found
++ boolean not_handled
++ boolean handler_accept
+}
+class com.h6.backend.configurer.InterceptorConfigurer {
++ void addInterceptors(InterceptorRegistry)
+}
+class com.h6.backend.service.user.UpdateUserServer {
+- UserMapper userMapper
++ ChangePasswordResponse changePassword(ChangePasswordRequest)
+}
+class com.h6.backend.data.user.AlterUserResponse {
++ boolean isOk
++ boolean usernameOk
++ boolean id_numberOk
++ boolean emailOk
++ boolean phone_numberOk
++ boolean departmentOk
++ boolean majorOk
++ boolean statusOk
+}
+class com.h6.backend.service.session.SessionListener {
++ void sessionDestroyed(HttpSessionEvent)
+}
+class com.h6.backend.service.classroom.ClassroomServer {
+~ ClassroomMapper classroomMapper
++ List<Classroom> getAllClassrooms()
++ int countClassroom(String)
++ void addClassroom(String)
+}
+interface com.h6.backend.mapper.UserMapper {
+~ List<Users> getUsersByUser_id(String)
+~ Users getUsersByUsername(String)
+~ List<Users> getUsers()
+~ int putEmailByUser_id(String,String)
+~ int putPhone_numberByUser_id(String,String)
+~ int putEmailAndPhoneByUser_id(String,String,String)
+~ List<Users> findByUserName(String)
+~ String getRoleByUser_id(String)
+~ String getId_numberByUser_id(String)
+~ Users findByUser_id(String)
+~ int countByUser_id(String)
+~ int countById_number(String)
+~ void saveUser(String,String,String,String,String,String,int,String,int,String,String,String)
+~ void putUser(String,String,String,String,String,String,String,String)
+~ void setPasswd(String,String)
+~ void setLoginStatus(String,int)
+~ void setLoginUrl(String,String)
+~ void setSession_id(String,String)
+}
+interface com.h6.backend.mapper.PermissionMapper {
+~ void modifyChooseCourse(String,int)
+~ List<Boolean> getChooseCourse(String)
+}
+class com.h6.backend.service.course.DeleteCourseServer {
+~ RequestMapper requestMapper
+~ CourseMapper courseMapper
++ DeleteCourseResponse deleteCourseServer(DeleteCourseRequest)
+}
+class com.h6.backend.data.user.UserInfo {
++ String user_id
++ String username
++ String role
++ String id_number
++ int register_year
++ String email
++ String phone_number
++ String department
++ String major
++ String status
+}
+class com.h6.backend.controller.ClasstimeController {
+~ ClasstimeServer classtimeServer
++ boolean setClasstime(int,String)
++ ResponseEntity<List<Classtime>> getClasstimeList()
++ int getSectionNumber()
+}
+interface com.h6.backend.mapper.ClassroomMapper {
+~ List<Classroom> getAllClassrooms()
+~ int countClassroom(String)
+~ void insertClassroom(String)
+}
+class com.h6.backend.data.admin.CourseRequestInfo {
+~ int id
+~ String requester_id
+~ String request_class
+~ JSONObject request_content
+~ String handler_id
+~ String handle_result
+}
+class com.h6.backend.service.course.handler.UpdateCourseHandler {
+~ CourseMapper courseMapper
++ boolean handle(CourseInfo)
+}
+class com.h6.backend.data.user.AddUserBatchResponse {
++ boolean valid
++ AddUserFileLog addUserFileLog
+}
+class com.h6.backend.service.course.FindCourseServer {
+~ CourseMapper courseMapper
++ List<Courses> FindAllCourses()
++ Courses FindCourseById(String,int)
++ List<Courses> FindCourseByNumber(String)
++ List<Courses> FindCourseByName(String)
++ List<Courses> FindCourseByDepartment(String)
++ List<Courses> FindCourseByTeacher(String)
+}
+class com.h6.backend.service.admin.ClassTableServer {
+~ ClassroomMapper classroomMapper
+~ CourseMapper courseMapper
+~ ClasstimeMapper classtimeMapper
++ TimeTableEntity getTimetable()
+- String[][] getTimetableOfClassroom(String)
++ ArrangeClassTableResponse ArrangeClassTable(ArrangeClassTableRequest)
+}
+class com.h6.backend.controller.OrganizationController {
+~ OrganizationServer organizationServer
+~ ResponseEntity<List<Organization>> getOrganizations()
+~ boolean addMajor(String,String)
+~ boolean altMajor(String,String,String)
+~ boolean altDepartment(String,String)
+~ boolean deleteMajor(String,String)
+~ boolean deleteDepartment(String)
+}
+class com.h6.backend.service.user.checker.UserChecker {
+~ UserMapper userMapper
+~ OrganizationMapper organizationMapper
++ boolean notNull(String)
++ boolean checkStatusFormat(String,String)
++ boolean checkUser_idExist(String)
++ boolean checkId_numberMatch(String,String)
++ boolean checkMajorExist(String,String)
++ boolean checkDepartmentExist(String)
++ boolean checkEmailFormat(String)
++ boolean checkPhone_numberFormat(String)
++ boolean checkRoleFormat(String)
++ boolean checkUser_idUnique(String)
++ boolean checkUsernameFormat(String)
++ boolean checkId_numberUnique(String)
++ boolean checkUser_idFormat(String,String)
+~ boolean checkId_numberFormat(String)
+~ int getRegister_year(String)
+~ int getCurrentYear()
+}
+class com.h6.backend.data.user.LoginRequest {
+~ String visitor_id
+~ String login_url
+~ String passwd
+}
+class com.h6.backend.data.course.CourseInfoFormat {
++ boolean vaild
++ boolean number
++ boolean suffix
++ boolean name
++ boolean point
++ boolean classes_per_week
++ boolean teacher_id
++ boolean max_student
++ boolean introduction
++ boolean department
++ Integrity integrity
+}
+class com.h6.backend.data.course.CourseInfoFormat.Integrity {
++ boolean complete
++ boolean number
++ boolean name
++ boolean teacher_id
++ boolean department
+}
+interface com.h6.backend.mapper.OrganizationMapper {
+~ List<String> getDepartments()
+~ List<String> getMajors()
+~ List<String> getMajorsByDepartment(String)
+~ List<Organization> getAll()
+~ int countDepartment(String)
+~ int countMajor(String)
+~ int countDepartmentAndMajor(String,String)
+~ void setOrganization(String,String)
+~ int delOrganizationsByDepartment(String)
+~ int delOrganizationByMajor(String,String)
+~ int altMajor(String,String,String)
+~ int altDepartment(String,String)
+}
+class com.h6.backend.Lab2BackEndApplication {
++ {static} ConfigurableApplicationContext ac
++ {static} void main(String[])
+}
+class com.h6.backend.data.admin.PermitRequest {
+~ String handler_id
+~ int request_id
+~ boolean approve
+}
+class com.h6.backend.entity.Classroom {
+- String id
+}
+class com.h6.backend.controller.RequestController {
+~ CourseRequestServer courseRequestServer
+~ PermitResponse permitCourseRequest(PermitRequest)
+~ List<CourseRequestInfo> getCourseRequest()
+~ List<CourseRequestInfo> getCourseRequest(int)
+~ List<CourseRequestInfo> getCourseRequestByHandler(String)
+~ List<CourseRequestInfo> getCourseRequestByHandler(String,String)
+~ List<CourseRequestInfo> getCourseRequestByRequester(String)
+~ List<CourseRequestInfo> getCourseRequestByRequester(String,String)
+}
+class com.h6.backend.service.course.func.CourseInfoChecker {
+~ OrganizationMapper organizationMapper
+~ ClassroomMapper classroomMapper
++ boolean CheckIntegrity(CourseInfo,CourseInfoFormat.Integrity)
++ boolean CheckCourseInfo(CourseInfo,CourseInfoFormat)
+}
+class com.h6.backend.data.admin.BatchAddResponse {
++ CourseInfoFormat infoFormat
+}
+class com.h6.backend.data.course.UpdateCourseResponse {
++ boolean submitted
++ boolean requester_valid
++ boolean exist
++ boolean self_operate
++ CourseInfoFormat courseInfoFormat
+}
+class com.h6.backend.data.user.ChangePasswordResponse {
++ boolean change_approved
++ boolean old_passwd_correct
++ PasswordFormat passwdFormat
+}
+interface com.h6.backend.data.course.Permitable {
++ String getRequester_id()
+}
+class com.h6.backend.controller.UserInfoController {
+~ UserServer userServer
+~ AddUserServer addUserServer
+~ ChangePasswordServer changePasswordServer
++ ResponseEntity<List<Users>> getUsers()
++ ResponseEntity<RegisterResponse> userRegister(RegisterRequest)
++ ResponseEntity<AddUserBatchResponse> AddUsersByCSV(String,MultipartFile)
++ ResponseEntity<AlterUserResponse> alterUser(AlterUserRequest)
++ boolean AlterEmailAndPhone(String,String,HttpSession)
++ ResponseEntity<UserInfo> getUserInfo(HttpSession)
++ ResponseEntity<ChangePasswordResponse> userLogin(ChangePasswordRequest)
++ ResponseEntity<String[]> getStatusList(String)
+}
+class com.h6.backend.data.course.DeleteCourseRequest {
+~ String requester_id
+~ String del_keyword
+~ String number
+~ int suffix
+~ String department
+~ String teacher
+}
+class com.h6.backend.data.course.ArrangeClassTableResponse {
++ boolean isOk
++ boolean authorized
++ boolean complete
++ boolean exist
++ boolean class_time
++ boolean classroom_id
++ boolean no_conflict
+}
+class com.h6.backend.service.session.SessionContext {
+- {static} HashMap<String,HttpSession> sessionMap
++ {static} void AddSession(HttpSession)
++ {static} void DelSession(HttpSession)
++ {static} void DelSessionSelf(HttpSession)
++ {static} boolean ExistSession(String)
++ {static} HttpSession getSession(String)
+}
+class com.h6.backend.service.course.handler.AddCourseHandler {
+~ CourseMapper courseMapper
++ boolean handle(CourseInfo)
+}
+class com.h6.backend.data.course.ArrangeClassTableRequest {
+~ String requester_id
+~ String number
+~ int suffix
+~ String class_time
+~ String classroom_id
+}
+class com.h6.backend.service.file.UploadServer {
++ String upload(MultipartFile,String,String)
+}
+class com.h6.backend.data.timetable.CourseSummary {
++ String classroom_status
++ String id
++ String name
+}
+class com.h6.backend.controller.ClassroomController {
+~ ClassroomServer classroomServer
+~ ResponseEntity<List<Classroom>> getAllClassroom()
+~ boolean addClassroom(String)
+}
+class com.h6.backend.entity.RequestEntity {
+~ String requester_id
+~ String request_class
+~ String request_content
+~ String handler_id
+~ String handle_result
+- int id
+}
+class com.h6.backend.data.user.AddUserFileLog {
++ int column
++ RegisterResponse registerResponse
+}
+class com.h6.backend.data.user.ChangePasswordRequest {
+~ String visitor_id
+~ String old_passwd
+~ String new_passwd
+}
+interface com.h6.backend.mapper.CourseMapper {
+~ int countCourse(String)
+~ List<Courses> getAllCourses()
+~ List<Courses> getCoursebyId(String)
+~ List<Courses> getCoursebyNumber(String)
+~ List<Courses> getCoursebyName(String)
+~ List<Courses> getCoursebyDepartment(String)
+~ List<Courses> getCoursebyTeacher(String)
+~ List<Courses> getCoursebyClassroom(String)
+~ void addCourse(String,String,String,int,int,String,int,String,String)
+~ void updateCourse(String,String,String,int,int,String,int,String,String)
+~ void arrangeCourse(String,String,String)
+~ int delCoursebyId(String)
+~ int delCoursebyNumber(String)
+~ int delCoursebyDepartment(String)
+~ int delCoursebyTeacher(String)
+}
+class com.h6.backend.data.user.RegisterResponse {
++ boolean isOk
++ boolean role
++ boolean user_id
++ boolean username
++ boolean id_number
++ boolean phone_number
++ boolean email
++ boolean department
++ boolean major
++ String passwd
++ RegisterFormat registerFormat
+}
+class com.h6.backend.data.user.RegisterResponse.RegisterFormat {
++ boolean isOk
++ boolean id_numberUnique
++ boolean id_numberFormat
++ boolean emailFormat
++ boolean phone_numberFormat
++ boolean usernameFormat
++ boolean roleFormat
++ boolean user_idUnique
++ boolean user_idFormat
++ boolean departmentExist
++ boolean majorExist
+}
+class com.h6.backend.service.user.UserLoginServer {
+- UserMapper userMapper
++ LoginResponse userLogin(LoginRequest,HttpSession)
+~ boolean findUser(String,LoginResponse)
+~ boolean verifyPasswd(String,String,LoginResponse)
+}
+class com.h6.backend.controller.UserLoginController {
+- UserLoginServer userLoginServer
++ ResponseEntity<LoginResponse> userLogin(LoginRequest,HttpSession)
+}
+class com.h6.backend.service.classtime.ClasstimeServer {
+~ ClasstimeMapper classtimeMapper
++ List<Classtime> getClasstimeList()
++ int getSectionInt()
++ boolean setClasstimeList(int,String)
+}
+class com.h6.backend.service.course.handler.DeleteCourseHandler {
+~ CourseMapper courseMapper
++ boolean handle(DeleteCourseRequest)
++ boolean DeleteCourseById(String,int)
++ boolean DeleteCourseByNumber(String)
++ boolean DeleteCourseByDepartment(String)
++ boolean DeleteCourseByTeacher(String)
+}
+class com.h6.backend.entity.Courses {
+- String id
+- String number
+- String name
+- int point
+- int classes_per_week
+- String teacher_id
+- String class_time
+- String classroom_id
+- int max_student
+- String introduction
+- String department
+}
+class com.h6.backend.data.user.RegisterRequest {
+~ String role
+~ String user_id
+~ String username
+~ String id_number
+~ String phone_number
+~ String email
+~ String department
+~ String major
+}
+class com.h6.backend.Interceptor.AdminCheckHandlerInterceptor {
++ boolean preHandle(HttpServletRequest,HttpServletResponse,Object)
++ void afterCompletion(HttpServletRequest,HttpServletResponse,Object,Exception)
+}
+class com.h6.backend.service.course.AddCourseServer {
+~ RequestMapper requestMapper
+~ CourseMapper courseMapper
+~ OrganizationMapper organizationMapper
+~ ClassroomMapper classroomMapper
++ AddCourseResponse addCourse(AddCourseRequest)
+}
+interface com.h6.backend.mapper.ClasstimeMapper {
+~ List<Classtime> getClasstimeList()
+~ void setSection(int,String)
+~ int maxSection()
+~ void deleteClasstimeBySection(int)
+}
+class com.h6.backend.filter.WebFilter {
++ void init(FilterConfig)
++ void doFilter(ServletRequest,ServletResponse,FilterChain)
++ void destroy()
+}
+class com.h6.backend.controller.CourseController {
+~ AddCourseServer addCourseServer
+~ DeleteCourseServer deleteCourseServer
+~ UpdateCourseServer updateCourseServer
+~ FindCourseServer findCourseServer
+~ List<Courses> findAllCourses()
+~ Courses findCourseById(String,int)
+~ List<Courses> findCourseByNumber(String)
+~ List<Courses> findCourseByName(String)
+~ List<Courses> findCourseByDepartment(String)
+~ List<Courses> findCourseByTeacher(String)
+~ AddCourseResponse addCourse(AddCourseRequest)
+~ UpdateCourseResponse updateCourse(UpdateCourseRequest)
+~ DeleteCourseResponse deleteCourseServer(DeleteCourseRequest)
+}
+class com.h6.backend.entity.Organization {
+- Long id
+~ String major
+~ String department
+}
+class com.h6.backend.data.admin.BatchAddRequest {
+~ String user_id
+~ MultipartFile file
+}
+class com.h6.backend.service.admin.CourseRequestServer {
+~ RequestMapper requestMapper
+~ CourseMapper courseMapper
+- CourseRequestInfo getRequestInfo(RequestEntity)
++ List<CourseRequestInfo> SummarizeRequestInfo(List<RequestEntity>)
++ List<CourseRequestInfo> getRequest()
++ List<CourseRequestInfo> getRequest(int)
++ List<CourseRequestInfo> getRequestByRequester(String)
++ List<CourseRequestInfo> getRequestByRequester(String,String)
++ List<CourseRequestInfo> getRequestByHandler(String)
++ List<CourseRequestInfo> getRequestByHandler(String,String)
++ PermitResponse approveRequest(int,String)
++ PermitResponse rejectRequest(int,String)
+- boolean CheckPermitRequest(int,String,PermitResponse)
+}
+class com.h6.backend.Interceptor.func.InterceptMessageSender {
++ void SendMessage(String,HttpServletResponse)
+}
+class com.h6.backend.controller.CSVUploadController {
+- BatchAddCourseServer batchAddServer
++ String hello()
++ BatchAddResponse AddCourseByCSV(String,MultipartFile)
+}
+class com.h6.backend.controller.ClassTableController {
+~ ClassTableServer classTableServer
+~ String getTimetable()
+~ ArrangeClassTableResponse arrangeClassTable(ArrangeClassTableRequest)
+}
+class com.h6.backend.service.user.AddUserServer {
+- UserMapper userMapper
+- OrganizationMapper organizationMapper
++ RegisterResponse userRegister(RegisterRequest)
++ AlterUserResponse alterUser(AlterUserRequest)
++ AddUserBatchResponse addUsersByCSV(String,MultipartFile)
+~ AddUserBatchResponse addUserByCSVFile(String)
+~ RegisterRequest userInfoUnpack(String[])
++ void checkRequest(RegisterRequest,RegisterResponse)
++ void checkAlterRequest(AlterUserRequest,AlterUserResponse)
+~ boolean notNull(String)
++ boolean checkStatusFormat(String,String)
++ boolean checkUser_idExist(String)
++ boolean checkId_numberMatch(String,String)
++ boolean checkMajorExist(String,String)
++ boolean checkDepartmentExist(String)
++ boolean checkEmailFormat(String)
++ boolean checkPhone_numberFormat(String)
++ boolean checkRoleFormat(String)
++ boolean checkUser_idUnique(String)
++ boolean checkUsernameFormat(String)
++ boolean checkId_numberUnique(String)
++ boolean checkUser_idFormat(String,String)
+~ boolean checkId_numberFormat(String)
+~ int getRegister_year(String)
+~ int getCurrentYear()
+~ void correctRequestForRegister(RegisterResponse)
+~ void addUser(RegisterRequest,String)
+}
+class com.h6.backend.service.user.checker.PasswordChecker {
++ boolean checkPasswdFormat(String,PasswordFormat)
+}
+class com.h6.backend.controller.NullForCheck {
+~ String pagecheck(HttpSession)
+}
+class com.h6.backend.data.user.LoginResponse {
++ boolean login_approved
++ boolean url_empty
++ boolean find_id
++ boolean passwd_correct
++ boolean repeat_login
++ boolean status_approved
++ String role
++ boolean passwd_check
+}
+class com.h6.backend.utils.Pair {
++ T1 fst
++ T2 snd
+}
+class com.h6.backend.service.admin.func_course.TimeTableChecker {
+~ ClassroomMapper classroomMapper
+~ CourseMapper courseMapper
++ boolean CheckClassTime(List<Pair<Integer,Integer>>,int)
++ boolean CheckClassroomId(String)
++ boolean CheckConflict(List<Pair<Integer,Integer>>,String)
++ boolean CheckArrangement(ArrangeClassTableRequest,ArrangeClassTableResponse)
+}
+class com.h6.backend.service.course.UpdateCourseServer {
+~ RequestMapper requestMapper
+~ CourseMapper courseMapper
+~ OrganizationMapper organizationMapper
+~ ClassroomMapper classroomMapper
++ UpdateCourseResponse updateCourse(UpdateCourseRequest)
+}
+class com.h6.backend.service.user.GetUserServer {
+~ UserMapper userMapper
+~ UserCheck userCheck
++ boolean AlterEmailAndPhone(String,String,String)
++ UserInfo getUserInfoByUser_id(String)
++ List<Users> getUsersList()
+}
+class com.h6.backend.service.admin.func_course.ClassTimeSwitcher {
++ {static} String List2String(List<Pair<Integer,Integer>>)
++ {static} List<Pair<Integer,Integer>> String2List(String)
+}
+class com.h6.backend.data.course.DeleteCourseResponse {
++ boolean submitted
++ boolean requester_valid
++ boolean self_operate
+}
+class com.h6.backend.service.admin.func_course.CSVCourseAnalysis {
+~ CourseMapper courseMapper
+~ OrganizationMapper organizationMapper
+~ ClassroomMapper classroomMapper
++ boolean CourseAnalysis(ArrayList<String[]>,BatchAddResponse)
+~ CourseInfo CourseUnpack(String[])
+}
+class com.h6.backend.controller.EduFunctionController {
+~ EduFunctionServer permissionServer
+~ void chooseCourse(boolean)
+~ boolean checkChooseCourse()
+}
+class com.h6.backend.data.course.UpdateCourseRequest {
+~ String requester_id
+~ CourseInfo courseInfo
+}
+class com.h6.backend.data.user.PasswordFormat {
++ boolean legal
++ boolean too_short
++ boolean too_long
++ boolean too_simple
++ boolean illegal_char
+}
+class com.h6.backend.data.user.StatusList {
++ {static} String[] teacher
++ {static} String[] student
++ {static} String[] teacher_approved
++ {static} String[] student_approved
+}
+class com.h6.backend.data.timetable.TimeTableEntity {
+- JSONObject content
++ String getJsonString()
++ void addRow(int,String,String)
++ String getDay(int)
+- String emptySummary()
++ String searchCourse(int,String,int)
+}
+
+
+com.h6.backend.data.course.Permitable <|.. com.h6.backend.data.course.AddCourseRequest
+org.springframework.data.jpa.repository.JpaRepository <|-- com.h6.backend.mapper.RequestMapper
+org.springframework.web.servlet.HandlerInterceptor <|.. com.h6.backend.Interceptor.LoginCheckHandlerInterceptor
+org.springframework.web.servlet.config.annotation.WebMvcConfigurer <|.. com.h6.backend.configurer.InterceptorConfigurer
+javax.servlet.http.HttpSessionListener <|.. com.h6.backend.service.session.SessionListener
+org.springframework.data.jpa.repository.JpaRepository <|-- com.h6.backend.mapper.UserMapper
+org.springframework.data.jpa.repository.JpaRepository <|-- com.h6.backend.mapper.PermissionMapper
+org.springframework.data.jpa.repository.JpaRepository <|-- com.h6.backend.mapper.ClassroomMapper
+com.h6.backend.data.course.CourseInfoFormat +.. com.h6.backend.data.course.CourseInfoFormat.Integrity
+org.springframework.data.jpa.repository.JpaRepository <|-- com.h6.backend.mapper.OrganizationMapper
+com.h6.backend.data.admin.BatchResponse <|-- com.h6.backend.data.admin.BatchAddResponse
+com.h6.backend.data.course.Permitable <|.. com.h6.backend.data.course.DeleteCourseRequest
+org.springframework.data.jpa.repository.JpaRepository <|-- com.h6.backend.mapper.CourseMapper
+com.h6.backend.data.user.RegisterResponse +.. com.h6.backend.data.user.RegisterResponse.RegisterFormat
+org.springframework.web.servlet.HandlerInterceptor <|.. com.h6.backend.Interceptor.AdminCheckHandlerInterceptor
+org.springframework.data.jpa.repository.JpaRepository <|-- com.h6.backend.mapper.ClasstimeMapper
+com.h6.backend.filter.Filter <|.. com.h6.backend.filter.WebFilter
+com.h6.backend.data.course.Permitable <|.. com.h6.backend.data.course.UpdateCourseRequest
+@enduml
